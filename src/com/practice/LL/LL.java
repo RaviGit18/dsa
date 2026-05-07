@@ -1,6 +1,9 @@
 package com.practice.LL;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.PriorityQueue;
 
 public class LL<T> {
     static void main() {
@@ -67,6 +70,50 @@ public class LL<T> {
         loopHead.next.next.next.next.next = loopHead.next.next;
 
         System.out.println("Is loop detected: " + detectLoop(loopHead));
+
+        ListNode<Integer> sortedHead1 = new ListNode(1);
+        sortedHead1.next = new ListNode(6);
+
+        ListNode<Integer> sortedHead2 = new ListNode(1);
+        sortedHead2.next = new ListNode(4);
+        sortedHead2.next.next = new ListNode(6);
+
+        ListNode<Integer> sortedHead3 = new ListNode(3);
+        sortedHead3.next = new ListNode(7);
+
+        List<ListNode<Integer>> sortedHeads = new ArrayList<>();
+        sortedHeads.add(sortedHead1);
+        sortedHeads.add(sortedHead2);
+        sortedHeads.add(sortedHead3);
+
+        combinedSortedLL(sortedHeads);
+    }
+
+    private static void combinedSortedLL(List<ListNode<Integer>> sortedHeads) {
+        PriorityQueue<ListNode<Integer>> minHeap = new PriorityQueue<>((a,b) -> a.val - b.val);
+
+        for (ListNode<Integer> head : sortedHeads) {
+            if (head != null) {
+                minHeap.offer(head);
+            }
+        }
+
+        ListNode<Integer> dummyHead = new ListNode(-1);
+        ListNode<Integer> current = dummyHead;
+
+        while (!minHeap.isEmpty()) {
+
+            ListNode<Integer> smallest = minHeap.poll();
+            current.next = smallest;
+            current = current.next;
+
+            if (smallest.next != null) {
+                minHeap.offer(smallest.next);
+            }
+
+        }
+        System.out.print("Combined sorted LL: ");
+        printLL(dummyHead.next);
     }
 
     private static boolean detectLoop (ListNode<Integer> head) {
