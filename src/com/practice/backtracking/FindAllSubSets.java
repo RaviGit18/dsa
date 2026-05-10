@@ -22,8 +22,8 @@ Output: [[], [4], [4, 5], [4, 5, 6], [4, 6], [5], [5, 6], [6]]
 
         List<List<Integer>> subsets = new ArrayList<>();
 
-        backtrack(nums, 0, new ArrayList<>(), subsets);
-
+        //backtrack(nums, 0, new ArrayList<>(), subsets);
+        backtrack2(nums, 0, new ArrayList<>(), subsets);
         return subsets;
     }
 
@@ -102,6 +102,21 @@ The method systematically explores all possible combinations by making binary ch
 
         currentSubSet.remove(currentSubSet.size() - 1);
         backtrack(nums, i + 1, currentSubSet, subsets);
+
+    }
+
+    private static void backtrack2(int[] nums, int i, ArrayList<Integer> currentSubSet, List<List<Integer>> subsets) {
+
+        subsets.add(new ArrayList<>(currentSubSet));
+
+        for (int st = i; st < nums.length; st++) {
+
+            currentSubSet.add(nums[st]);
+
+            backtrack2(nums, st + 1, currentSubSet, subsets);
+
+            currentSubSet.remove(currentSubSet.size() - 1);
+        }
 
     }
 }

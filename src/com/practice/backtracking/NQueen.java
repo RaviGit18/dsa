@@ -16,6 +16,7 @@ Output: 2
         int n = 4;
         System.out.println("Number of distinct configurations: " + nQueen(n));
         System.out.println("Number of distinct configurations another appraoch: " + nQueen1(n));
+        System.out.println("Number of distinct configurations recursion-only: " + nQueen2(n));
     }
 
     private static int nQueen1(int n) {
@@ -52,6 +53,52 @@ Output: 2
             antiDiagonals.remove(currentAntiDiagonal);
 
         }
+    }
+
+    private static int nQueen2(int n) {
+        int[] result = new int[1];
+        backtrack2(n, 0, new HashSet<>(), new HashSet<>(), new HashSet<>(), result);
+        return result[0];
+    }
+
+    private static void backtrack2(int n, int row, HashSet<Object> columns, HashSet<Object> diagonals, HashSet<Object> antiDiagonals, int[] result) {
+        if (row == n) {
+            result[0]++;
+            return;
+        }
+
+        if (row < 0 || row >= n) {
+            return;
+        }
+        
+        // Try placing queen in column 0
+        backtrack2Helper(n, row, 0, columns, diagonals, antiDiagonals, result);
+    }
+
+    private static void backtrack2Helper(int n, int row, int col, HashSet<Object> columns, HashSet<Object> diagonals, HashSet<Object> antiDiagonals, int[] result) {
+        if (col >= n) {
+            return;
+        }
+        
+        int currentDiagonal = row - col;
+        int currentAntiDiagonal = row + col;
+
+        if (!columns.contains(col) && !diagonals.contains(currentDiagonal) && !antiDiagonals.contains(currentAntiDiagonal)) {
+            // Place queen
+            columns.add(col);
+            diagonals.add(currentDiagonal);
+            antiDiagonals.add(currentAntiDiagonal);
+
+            backtrack2(n, row + 1, columns, diagonals, antiDiagonals, result);
+
+            // Backtrack
+            columns.remove(col);
+            diagonals.remove(currentDiagonal);
+            antiDiagonals.remove(currentAntiDiagonal);
+        }
+        
+        // Try next column
+        backtrack2Helper(n, row, col + 1, columns, diagonals, antiDiagonals, result);
     }
 
     private static int nQueen(int n) {

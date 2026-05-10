@@ -2,6 +2,7 @@ package com.practice.graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 class ConnectTheDots {
@@ -40,7 +41,8 @@ There will be at least 2 points on the plane.
             }
         }
 
-        edges.sort((a, b) -> Integer.compare(a[2], b[2]));
+        edges.sort(Comparator.comparingInt(a -> a[2]));
+        //edges.sort((a, b) -> Integer.compare(a[2], b[2]));
 
         int totalCost = 0, edgesAdded = 0;
 

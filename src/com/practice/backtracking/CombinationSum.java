@@ -26,7 +26,8 @@ The output must not contain duplicate combinations. For example, [1, 1, 2] and [
     private static List<List<Integer>> combinationSum(int[] nums, int target) {
         List<List<Integer>> result = new ArrayList<>();
 
-        backtrack(nums, target, 0, new ArrayList<>(), result);
+        //backtrack(nums, target, 0, new ArrayList<>(), result);
+        backtrack1(nums, target, 0, new ArrayList<>(), result);
         return result;
     }
 
@@ -50,5 +51,24 @@ The output must not contain duplicate combinations. For example, [1, 1, 2] and [
             combination.remove(combination.size() - 1);
 
         }
+    }
+
+    private static void backtrack1(int[] nums, int target, int startIndex, ArrayList<Integer> combination, List<List<Integer>> result) {
+        if (target == 0) {
+            result.add(new ArrayList<>(combination));
+            return;
+        }
+
+        if (target < 0 || startIndex >= nums.length) {
+            return;
+        }
+        
+        // Skip current element
+        backtrack1(nums, target, startIndex + 1, combination, result);
+        
+        // Include current element (can reuse same element)
+        combination.add(nums[startIndex]);
+        backtrack1(nums, target - nums[startIndex], startIndex, combination, result);
+        combination.remove(combination.size() - 1);
     }
 }

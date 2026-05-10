@@ -16,16 +16,16 @@ n ≥ 1, where n denotes the number of nodes in the tree.
     public static void main(String[] args) {
         TreeNode bstRoot = new TreeNode(5);
 
-        bstRoot.left = new TreeNode(2);
+        /*bstRoot.left = new TreeNode(2);
         bstRoot.left.left = new TreeNode(1);
-        bstRoot.left.right = new TreeNode(4);
+        bstRoot.left.right = new TreeNode(4);*/
 
         bstRoot.right = new TreeNode(7);
         bstRoot.right.left = new TreeNode(6);
         bstRoot.right.right = new TreeNode(9);
 
-        System.out.println(kthSmallest(bstRoot, 3));
-        System.out.println(kthSmallestIterative(bstRoot, 3));
+        System.out.println(kthSmallest(bstRoot, 2));
+        System.out.println(kthSmallestIterative(bstRoot, 2));
     }
 
     private static int kthSmallestIterative(TreeNode root, int k) {
@@ -41,7 +41,8 @@ n ≥ 1, where n denotes the number of nodes in the tree.
 
             curr = stack.pop();
 
-            if (--k == 0) return curr.val;
+            k--;
+            if (k == 0) return curr.val;
 
             curr = curr.right;
         }

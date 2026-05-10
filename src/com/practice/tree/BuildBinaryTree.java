@@ -24,6 +24,36 @@ The tree consists of unique values.
         System.out.println();
     }
 
+    private static TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        //Root Cause: Java passes primitives by value, so incrementing preOrderIndex in recursive calls didn't affect the original variable.
+        // Using an array wrapper allows the index to persist across all recursive calls.
+        int[] preOrderIndex = {0};
+        Map<Integer, Integer> indexMapOfInOrder = new HashMap<>();
+
+        for (int i = 0; i < inorder.length; i++) {
+            indexMapOfInOrder.put(inorder[i], i);
+        }
+
+        return buildTreeUtil(preorder, 0, preorder.length - 1, indexMapOfInOrder, preOrderIndex);
+    }
+
+    private static TreeNode buildTreeUtil(int[] preorder, int left, int right, Map<Integer, Integer> indexMapOfInOrder, int[] preOrderIndex) {
+        if (left > right) { return null;}
+
+        int rootValFromPreOrder = preorder[preOrderIndex[0]];
+
+        int rootIndexFromInOrder = indexMapOfInOrder.get(rootValFromPreOrder);
+
+        TreeNode root = new TreeNode(rootValFromPreOrder);
+
+        preOrderIndex[0]++;
+        root.left = buildTreeUtil(preorder, left, rootIndexFromInOrder - 1, indexMapOfInOrder, preOrderIndex);
+        root.right = buildTreeUtil(preorder, rootIndexFromInOrder + 1, right, indexMapOfInOrder, preOrderIndex);
+
+        return root;
+    }
+
     private static void inOrderTraversal(TreeNode root) {
         if (root == null) { return;}
 
@@ -38,35 +68,5 @@ The tree consists of unique values.
         System.out.print(root.val + " ");
         preOrderTraversal(root.left);
         preOrderTraversal(root.right);
-    }
-
-    private static TreeNode buildTree(int[] preorder, int[] inorder) {
-
-        //Root Cause: Java passes primitives by value, so incrementing preOrderIndex in recursive calls didn't affect the original variable.
-        // Using an array wrapper allows the index to persist across all recursive calls.
-        int[] preOrderIndex = {0};
-        Map<Integer, Integer> indexMap = new HashMap<>();
-
-        for (int i = 0; i < inorder.length; i++) {
-            indexMap.put(inorder[i], i);
-        }
-
-        return buildTreeUtil(preorder, 0, preorder.length - 1, indexMap, preOrderIndex);
-    }
-
-    private static TreeNode buildTreeUtil(int[] preorder, int left, int right, Map<Integer, Integer> indexMap, int[] preOrderIndex) {
-        if (left > right) { return null;}
-
-        int rootVal = preorder[preOrderIndex[0]];
-
-        int rootIndex = indexMap.get(rootVal);
-
-        TreeNode root = new TreeNode(rootVal);
-
-        preOrderIndex[0]++;
-        root.left = buildTreeUtil(preorder, left, rootIndex - 1, indexMap, preOrderIndex);
-        root.right = buildTreeUtil(preorder, rootIndex + 1, right, indexMap, preOrderIndex);
-
-        return root;
     }
 }

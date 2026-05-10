@@ -24,9 +24,34 @@ Output: [[4, 5, 6], [4, 6, 5], [5, 4, 6], [5, 6, 4], [6, 4, 5], [6, 5, 4]]*/
 
         //backtracking(nums, new boolean[nums.length], new ArrayList<>(), permutations);
 
-        backtrack(nums, new HashSet<Integer>(), new ArrayList<Integer>(), permutations);
+        //backtrack(nums, new HashSet<Integer>(), new ArrayList<Integer>(), permutations);
+
+        backtrack1(nums, 0, new HashSet<Integer>(), new ArrayList<Integer>(), permutations);
 
         return permutations;
+    }
+
+    private static void backtrack1(int[] nums, int i, HashSet<Integer> used, ArrayList<Integer> current, List<List<Integer>> permutations) {
+        if (i == nums.length) {
+            if (current.size() == nums.length) {
+                permutations.add(new ArrayList<>(current));
+            }
+            return;
+        }
+        
+        // Skip current element
+        backtrack1(nums, i + 1, used, current, permutations);
+        
+        // Include current element if not used
+        if (!used.contains(nums[i])) {
+            current.add(nums[i]);
+            used.add(nums[i]);
+            
+            backtrack1(nums, 0, used, current, permutations);
+            
+            current.remove(current.size() - 1);
+            used.remove(nums[i]);
+        }
     }
 
     private static void backtrack(int[] nums, HashSet<Integer> used, ArrayList<Integer> current, List<List<Integer>> permutations) {
