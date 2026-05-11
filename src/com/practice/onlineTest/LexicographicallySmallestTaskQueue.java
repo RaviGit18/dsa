@@ -3,7 +3,9 @@ package com.practice.onlineTest;
 class LexicographicallySmallestTaskQueue {
 
     /*java program for
-A system manages several tasks. There is a string taskQueue containing n tasks, where each task has a priority level represented as follows: '1' for low, '2' for medium, and '3' for high. To optimize the system, the following operations can be performed any number of times:
+A system manages several tasks. There is a string taskQueue containing n tasks,
+where each task has a priority level represented as follows: '1' for low, '2' for medium, and '3' for high.
+To optimize the system, the following operations can be performed any number of times:
 
 Swap adjacent tasks with values '1' and '2' (or vice versa).
 
@@ -11,7 +13,8 @@ Swap adjacent tasks with values '2' and '3' (or vice versa).
 
 Determine the lexicographically smallest order of the task Queue.
 
-Note: A task order a is lexicographically smaller than a task order b if and only if in the first position where a and b differ, the task order a has a lower priority task than b.
+Note: A task order a is lexicographically smaller than a task order b
+if and only if in the first position where a and b differ, the task order a has a lower priority task than b.
 */
     /*Key Observation
 

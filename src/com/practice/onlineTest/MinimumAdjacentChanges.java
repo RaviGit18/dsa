@@ -100,14 +100,6 @@ if only count required.
 
     public static void main(String[] args) {
 
-        System.out.println(
-                minChanges("aab"));    // 1
-
-        System.out.println(
-                minChanges("aaaa"));   // 2
-
-        System.out.println(
-                minChanges("abba"));   // 0  -- need to check
 
         System.out.println(
                 minChangesOptimized("aab"));    // 1
@@ -117,22 +109,6 @@ if only count required.
 
         System.out.println(
                 minChangesOptimized("abba"));   // 0
-    }
-
-    public static int minChanges(String s) {
-
-        int changes = 0;
-
-        for (int i = 1; i < s.length(); i++) {
-
-            // Adjacent characters same
-            if (s.charAt(i) == s.charAt(i - 1)) {
-
-                changes++;
-            }
-        }
-
-        return changes / 2;
     }
 
     //Space Optimized Version
@@ -161,6 +137,6 @@ This avoids overcounting.*/
             }
         }
 
-        return changes / 2;
+        return changes;
     }
 }
