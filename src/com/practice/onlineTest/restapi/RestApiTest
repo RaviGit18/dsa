@@ -1,0 +1,140 @@
+Problem Statement: REST API Data Processing
+You are given a REST API endpoint that returns JSON data about employees in a company. Your task is to consume this API, process the data, and produce the required output.
+
+API Endpoint: https://jsonmock.hackerrank.com/api/employees
+
+This endpoint returns paginated JSON data in the following format:
+
+{
+  "page": 1,
+  "per_page": 10,
+  "total": 50,
+  "total_pages": 5,
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "age": 30,
+      "salary": 50000
+    },
+    ...
+  ]
+}
+
+Task:
+	Write a program that:
+		Reads data from the given REST API endpoint.
+		Iterates through all pages of results.
+		Extracts the name of employees whose salary is greater than or equal to a given threshold.
+		Prints the names in alphabetical order, one per line.
+
+Input Format: A single integer threshold representing the minimum salary.
+Output Format :
+	Print the names of employees with salary ≥ threshold, sorted alphabetically.
+	If no employees match, print: No Results Found
+
+Constraints:
+	1 ≤ threshold ≤ 10^6
+	API may return up to 1000 employees across multiple pages.
+
+Sample Test Cases
+	Test Case 1:
+		Input: 50000
+		Output:
+			Alice Smith
+			John Doe
+
+	Test Case 2:
+		Input: 100000
+		Output: No Results Found
+
+	Test Case 3:
+		Input: 75000
+		Output:
+			David Johnson
+			Maria Lopez
+
+	Test Case 4
+		Input: 30000
+		Output:
+			Alice Smith
+			David Johnson
+			John Doe
+			Maria Lopez
+========================================
+
+package com.practice.onlineTest.restapi;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class Solution {
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int threshold = sc.nextInt();
+        sc.close();
+
+        List<String> names = new ArrayList<>();
+        int page = 1;
+        int totalPages;
+
+        do {
+            // Build URL with page parameter
+            String apiUrl = "https://jsonmock.hackerrank.com/api/employees?page=" + page;
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            // Read response
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                response.append(line);
+            }
+            in.close();
+
+            // Parse JSON
+            JSONObject json = new JSONObject(response.toString());
+            totalPages = json.getInt("total_pages");
+            JSONArray data = json.getJSONArray("data");
+
+            // Filter employees by salary
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject emp = data.getJSONObject(i);
+                int salary = emp.getInt("salary");
+                if (salary >= threshold) {
+                    names.add(emp.getString("name"));
+                }
+            }
+
+            page++;
+        } while (page <= totalPages);
+
+        // Print results
+        if (names.isEmpty()) {
+            System.out.println("No Results Found");
+        } else {
+            Collections.sort(names);
+            for (String name : names) {
+                System.out.println(name);
+            }
+        }
+    }
+}
+
+====================================
+
+How It Works
+	Reads the salary threshold from input.
+	Calls the API endpoint with pagination (?page=1, ?page=2, …).
+	Parses JSON response using org.json.
+	Collects names of employees whose salary ≥ threshold.
+	Sorts names alphabetically and prints them.
+	Prints "No Results Found" if none match.
